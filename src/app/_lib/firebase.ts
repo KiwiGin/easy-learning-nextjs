@@ -1,5 +1,19 @@
 import db from './firebaseConfig';
-import { addDoc, collection, getDocs, updateDoc, doc,deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, updateDoc, doc,deleteDoc, UpdateData } from 'firebase/firestore';
+
+export interface Student {
+    age:                number;
+    dni:                number;
+    email:              string;
+    firstname:          string;
+    grade:              number;
+    lastname:           string;
+    password:           string;
+    profilePictureLink: string;
+    section:            string;
+    sex:                string;
+    tutorId:            string;
+}
 
 //STUDENT//---
 //Create
@@ -21,7 +35,7 @@ export const readData = async () => {
 }
 
 //Update
-export const updateData = async (id:string, data:any) => {
+export const updateData = async (id:string, data: UpdateData<Student>) => {
     try {
         await updateDoc(doc(db, "Student", id), data);
     } catch (e) {

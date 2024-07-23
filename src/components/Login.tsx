@@ -23,8 +23,6 @@ export default function Login() {
     const handleSubmit = (e:any) => {
         e.preventDefault();
         // Perform login logic here
-        console.log('Username:', username);
-        console.log('Password:', password);
         // Se validan credenciales
         // Se redirige a la página de inicio
         if (username === 'estudiante' && password === 'contraseña') {
