@@ -2,7 +2,7 @@ import Link from 'next/link'
 import AsideButton from './AsideButton'
 import Image from 'next/image';
 
-export default function TeacherSideBar({onButtonClick, page}: {onButtonClick: (view: string) => void, page: string}){
+export default function TeacherSideBar({onButtonClick, page, course}: {onButtonClick?: (view: string) => void; page: string; course?: string}) {
   if(page === 'home'){
     return (
       <aside className="w-96">
@@ -18,8 +18,8 @@ export default function TeacherSideBar({onButtonClick, page}: {onButtonClick: (v
             </div>
           </div>
           <ul className="flex flex-col gap-4">
-            <AsideButton icon="/test_icon.svg" label="Datos" onClick={() => onButtonClick('datos')} />
-            <AsideButton icon="/courses_icon.svg" label="Cursos" onClick={() => onButtonClick('cursos')}/>
+            <AsideButton icon="/test_icon.svg" label="Datos" link='/teacher/datos'/>
+            <AsideButton icon="/courses_icon.svg" label="Cursos" link='/teacher/cursos' />
             <Link href="/word"><button className="bg-blue-500 text-white h-9 flex items-center pl-2 gap-3 w-full">Word</button></Link>
             <Link href="/md"><button className="bg-purple-500 text-white h-9 flex items-center pl-2 gap-3 w-full">Markdown</button></Link>
             <Link href="/quiz"><button className="bg-green-500 text-white h-9 flex items-center pl-2 gap-3 w-full">Quiz</button></Link>
@@ -34,10 +34,10 @@ export default function TeacherSideBar({onButtonClick, page}: {onButtonClick: (v
       <aside className="w-96">
         <nav className="flex flex-col gap-4 h-full bg-[#D7E897]">
           <ul className="flex flex-col gap-4">
-            <AsideButton icon="/test_icon.svg" label="Gestión de actividades" onClick={() => onButtonClick('activity_management')} />
-            <AsideButton icon="/questions_icon.svg" label="Gestión de preguntas" onClick={() => onButtonClick('question_management')}/>
-            <AsideButton icon="/report_icon.svg" label="Reportes" onClick={() => onButtonClick('reports')}/>
-            <AsideButton icon="/media_icon.svg" label="Recursos digitales" onClick={() => onButtonClick('media')}/>
+            <AsideButton icon="/test_icon.svg" label="Gestión de evaluaciones" link={`/teacher/cursos/${course}/activity_management`} />
+            <AsideButton icon="/questions_icon.svg" label="Gestión de preguntas" link={`/teacher/cursos/${course}/question_management`} />
+            <AsideButton icon="/report_icon.svg" label="Reportes" link={`/teacher/cursos/${course}/reports`}/>
+            <AsideButton icon="/media_icon.svg" label="Recursos digitales" link='/' />
             {/* <Link to="/word"><button className="bg-blue-500 text-white h-9 flex items-center pl-2 gap-3 w-full">Word</button></Link>
             <Link to="/md"><button className="bg-purple-E500 text-white h-9 flex items-center pl-2 gap-3 w-full">Markdown</button></Link>
             <Link to="/quiz"><button className="bg-green-500 text-white h-9 flex items-center pl-2 gap-3 w-full">Quiz</button></Link> */}

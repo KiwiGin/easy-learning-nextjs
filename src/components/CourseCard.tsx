@@ -8,7 +8,7 @@ function CourseCard({courseName}: {courseName: string}) {
 
   return (
     <>
-    <Link href={`/teacher/${courseName}`}>
+    <Link href={`/teacher/cursos/${courseName}/activity_management`}>
         <div className="flex flex-col bg-white rounded-lg shadow-lg w-auto cursor-pointer hover:shadow-2xl transition duration-300 ease-in-out">
             <div className="flex justify-between items-center p-4 bg-[#CC99FF]">
                 <div>

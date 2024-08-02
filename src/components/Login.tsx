@@ -43,7 +43,7 @@ export default function Login() {
                 router.push('/student');
             }
             if (isTeacher) {
-                router.push('/teacher');
+                router.push('/teacher/datos');
             }
         }
     }, [loggedIn, isStudent, isTeacher, router]);
