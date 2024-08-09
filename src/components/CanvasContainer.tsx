@@ -3,6 +3,10 @@
 import React, { useCallback, useRef, useState } from "react";
 import CanvasComponent from "../canvasComponents/CanvasComponent";
 import Toolbar from "../canvasComponents/Toolbar";
+import { BsGrid1X2 } from "react-icons/bs";
+import { FaShapes } from "react-icons/fa";
+import { TbPlusEqual } from "react-icons/tb";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 export const CanvasContext = React.createContext<ICanvasContext>({});
 
@@ -265,6 +269,17 @@ const CanvasContainer = () => {
     isSelectAll.current = false;
   }, []);
 
+  const [state, setState] = useState("");
+  const [show, setShow] = useState({
+    status: true,
+    name: ""
+  });
+
+  const setElements = (type: string, name: string) => {
+    setState(type);
+    setShow({ status: false, name: name });
+  };
+
   React.useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("mousedown", handleMouseDown);
@@ -275,17 +290,57 @@ const CanvasContainer = () => {
   }, [handleKeyDown, handleMouseDown]);
 
   return (
-    <div ref={containerRef}>
-      <CanvasContext.Provider value={context}>
-        <Toolbar isEditEnable={enableQuillToolbar} />
-        <div className="canvas-container">
-          {canvasData.map((canvas) => {
-            return <CanvasComponent key={canvas.id} {...canvas} />;
-          })}
+    <>
+      <div ref={containerRef}>
+        <div className="flex flex-row">
+          <div className="w-[80px] bg-slate-600 z-50 h-[73vh] text-slate-300 overflow-y-auto">
+            <div onClick={()=>setElements('shape', 'shape')} className={`w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}>
+              <span className="text-2xl"><FaShapes/></span>
+              <span className="text-xs font-medium">Formas</span>
+            </div>
+            <div onClick={()=>setElements('equation', 'equations')} className={`w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}>
+              <span className="text-2xl"><TbPlusEqual/></span>
+              <span className="text-xs font-medium">Ecuacion</span>
+            </div>
+            <div onClick={()=>setElements('image', 'uploadImage')} className={`w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}>
+              <span className="text-2xl"><BsGrid1X2/></span>
+              <span className="text-xs font-medium">Imagen</span>
+            </div>
+            <div onClick={()=>setElements('audio', 'media')} className={`w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}>
+              <span className="text-2xl"><BsGrid1X2/></span>
+              <span className="text-xs font-medium">Audio</span>
+            </div>
+            <div onClick={()=>setElements('text', 'text')} className={`w-full h-[80px] cursor-pointer flex justify-center flex-col items-center gap-1 hover:text-gray-100`}>
+              <span className="text-2xl"><BsGrid1X2/></span>
+              <span className="text-xs font-medium">Texto</span>
+            </div>
+          </div>
+          <CanvasContext.Provider value={context}>
+            <div className={`${show.status ? 'p-0 left-[390px] w-[50px]':'px-8 left-[455px] py-5 w-[350px]'} bg-slate-700 h-full fixed transition-all z-30 duration-700`}>
+            {/* <div className={`${show.status ? 'p-0 -left-[350px]':'px-8 left-[455px] py-5'} bg-slate-700 h-full fixed transition-all w-[350px] z-30 duration-700`}> */}
+              <div onClick={()=>setShow({name:"", status: true})} className="flex absolute justify-center items-center bg-slate-700 w-[20px] -right-2 text-slate-300 top-[30%] cursor-pointer h-[100px] rounded-full"><MdKeyboardArrowLeft/></div>
+              <div>test</div>
+            </div>
+            <div className="flex flex-col w-4/5">
+              <div className="flex flex-row">
+                <Toolbar isEditEnable={enableQuillToolbar} />
+                {/* botones para guardar */}
+                <button className="flex items-center mr-2.5 p-2 cursor-pointer rounded-sm transition-all duration-300 ease-out hover:bg-gray-200 hover:shadow-md">Guardar</button>
+              </div>
+              <div className="canvas-container">
+                {canvasData.map((canvas) => {
+                  return <CanvasComponent key={canvas.id} {...canvas} />;
+                })}
+              </div>
+
+            </div>
+            {/* {JSON.stringify(canvasData)} */}
+          </CanvasContext.Provider>
+
         </div>
-        {/* {JSON.stringify(canvasData)} */}
-      </CanvasContext.Provider>
-    </div>
+      </div>
+    
+    </>
   );
 };
 
