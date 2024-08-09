@@ -7,9 +7,9 @@ export default function StudentSideBar() {
     <aside className="w-96">
       <nav className="flex flex-col gap-4 h-max">
         <ul className="flex flex-col gap-4">
-          <AsideButton icon="/test_icon.svg" label="Test" />
-          <AsideButton icon="/semanal_test_icon.svg" label="Prueba Semanal" />
-          <AsideButton icon="/homework_icon.svg" label="Tarea en casa" />
+          <AsideButton icon="/test_icon.svg" label="Test" link='/' />
+          <AsideButton icon="/semanal_test_icon.svg" label="Prueba Semanal" link='/'/>
+          <AsideButton icon="/homework_icon.svg" label="Tarea en casa" link='/'/>
           {/* <AsideButton
             icon={reinforcement_icon}
             label="Evaluación de reforzamiento"
