@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import parse from "html-react-parser";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -27,9 +27,7 @@ export default function TextElement(props: ICanvasComponent){
   const modules = {
     toolbar: "#toolbar"
   };
-  // useEffect(() => {
-  //   // Código que usa document aquí
-  //   let scale = 1;
+  // let scale = 1;
   // const conatiner = document.querySelector<HTMLElement>(".quill-container");
   // if (conatiner && dimension) {
   //   const { offsetHeight, offsetWidth } = conatiner;
@@ -40,7 +38,6 @@ export default function TextElement(props: ICanvasComponent){
   //   );
   //   console.log(scale);
   // }
-  // }, [dimension]); 
   console.log(isReadOnly);
 
   return (
