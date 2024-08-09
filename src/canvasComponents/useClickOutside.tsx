@@ -1,32 +1,35 @@
-import React from "react";
+"use client";
 
-export default function useOnClickOutside({ref, handler}: {ref: React.MutableRefObject<any>, handler: (event: MouseEvent | TouchEvent) => void}) {
-  React.useEffect(
-    () => {
-      const listener = (event:any) => {
-        // Do nothing if clicking ref's element or descendent elements
-        if (!ref.current || ref.current.contains(event.target)) {
-          return;
-        }
+import React, { useEffect, MutableRefObject } from "react";
 
-        handler(event);
-      };
+export default function useOnClickOutside({
+  ref,
+  handler
+}: {
+  ref: MutableRefObject<any>;
+  handler: (event: MouseEvent | TouchEvent) => void;
+}) {
+  useEffect(() => {
+    // Verifica que el código solo se ejecute en el lado del cliente
+    if (typeof document === 'undefined') {
+      return;
+    }
 
-      document.addEventListener("mousedown", listener);
-      document.addEventListener("touchstart", listener);
+    const listener = (event: MouseEvent | TouchEvent) => {
+      // No hacer nada si se hace clic en el elemento del ref o en los elementos descendientes
+      if (!ref.current || ref.current.contains(event.target as Node)) {
+        return;
+      }
 
-      return () => {
-        document.removeEventListener("mousedown", listener);
-        document.removeEventListener("touchstart", listener);
-      };
-    },
-    // Add ref and handler to effect dependencies
-    // It's worth noting that because passed in handler is a new ...
-    // ... function on every render that will cause this effect ...
-    // ... callback/cleanup to run every render. It's not a big deal ...
-    // ... but to optimize you can wrap handler in useCallback before ...
-    // ... passing it into this hook.
-    [ref, handler]
-  );
-};
+      handler(event);
+    };
 
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  }, [ref, handler]);
+}

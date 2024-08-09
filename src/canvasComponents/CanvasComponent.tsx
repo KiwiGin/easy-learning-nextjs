@@ -1,10 +1,14 @@
 'use client';
-import React, { useContext, useRef } from "react";
+
+import React, { useContext, useRef, useState } from "react";
 import { ResizeEnable, Rnd } from "react-rnd";
 import { CanvasContext, ICanvasComponent } from "../components/CanvasContainer";
 import { resizeHandleClasses } from "../app/_lib/canvasUtils";
-import ImageElement from "./ImageElement";
-import TextElement from "./TextElement";
+import dynamic from 'next/dynamic';
+
+// importar los componentes dinámicamente con ssr: false para evitar problemas con el renderizado en el servidor
+const ImageElement = dynamic(() => import("./ImageElement"), { ssr: false });
+const TextElement = dynamic(() => import("./TextElement"), { ssr: false });
 
 const componentMap: { [key: string]: React.ComponentType<ICanvasComponent> } = {
   TEXT: TextElement,
@@ -16,30 +20,31 @@ const getEnableResize = (type: string): ResizeEnable => {
     bottom: type === "IMAGE",
     bottomLeft: true,
     bottomRight: true,
-
     top: type === "IMAGE",
     topLeft: true,
     topRight: true,
-
     left: true,
     right: true
   };
 };
-export default function CanvasComponent(props: ICanvasComponent){
+
+export default function CanvasComponent(props: ICanvasComponent) {
   const { state, actions } = useContext(CanvasContext);
   const { dimension, position, content, id, type } = props;
-  const [showGrids, setShowGrids] = React.useState(false);
-  const [isReadOnly, setIsReadOnly] = React.useState(true);
-  const elementRef = React.useRef<HTMLDivElement>(null);
+  const [showGrids, setShowGrids] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const elementRef = useRef<HTMLDivElement>(null);
   const isDragged = useRef<boolean>(false);
 
   const activeSelection = state?.activeSelection;
 
-  const onBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+  const handleBlur = () => {
+    if (!document || !elementRef.current) return;
+
     const toolbarElement = document.querySelector("#toolbar");
     if (
-      event.currentTarget.contains(event?.relatedTarget as Element) ||
-      toolbarElement?.contains(event?.relatedTarget as Element)
+      elementRef.current.contains(document.activeElement) ||
+      toolbarElement?.contains(document.activeElement)
     ) {
       return;
     }
@@ -50,6 +55,11 @@ export default function CanvasComponent(props: ICanvasComponent){
       actions?.setActiveSelection(new Set(activeSelection));
     }
   };
+
+  React.useEffect(() => {
+    window.addEventListener('focusout', handleBlur);
+    return () => window.removeEventListener('focusout', handleBlur);
+  }, [actions, id, activeSelection]);
 
   const getComponent = () => {
     const Component = type && componentMap[type];
@@ -84,7 +94,7 @@ export default function CanvasComponent(props: ICanvasComponent){
     setShowGrids(false);
   };
 
-  const onfocus = (event: React.MouseEvent) => {
+  const onFocus = (event: React.MouseEvent) => {
     if (id) {
       actions?.setActiveSelection(new Set(state?.activeSelection.add(id)));
     }
@@ -135,8 +145,7 @@ export default function CanvasComponent(props: ICanvasComponent){
         onMouseLeave={onMouseLeave}
         onDoubleClick={onDoubleClick}
         onKeyDown={onKeyDown}
-        onFocus={onfocus}
-        onBlur={onBlur}
+        onFocus={onFocus}
         tabIndex={0}
         lockAspectRatio={type === "IMAGE"}
       >
@@ -144,4 +153,4 @@ export default function CanvasComponent(props: ICanvasComponent){
       </Rnd>
     </div>
   );
-};
+}

@@ -1,3 +1,4 @@
+
 import CardProfile from '../components/CardProfile';
 import CourseSelector from '../components/CourseSelector';
 import ActivityManagement from './ActivityManagement';
